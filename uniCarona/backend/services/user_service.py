@@ -33,7 +33,7 @@ def atualizar_usuario(usuario_id, data):
         user = db.query(Usuario).filter(Usuario.id == usuario_id).first()
     
         if not user:
-            return None
+            return {"message": "Usuário não encontrado!"}
     
         user.nome=data.nome
         user.tipo=data.tipo
@@ -59,6 +59,6 @@ def deletar_usuario(usuario_id):
         db.delete(user)
         db.commit()
 
-        return {"message": "Usuário deletado"}
+        return {"message": "Usuário deletado com sucesso"}
     finally:
         db.close()
