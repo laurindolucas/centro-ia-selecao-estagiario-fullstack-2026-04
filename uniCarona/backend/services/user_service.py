@@ -9,7 +9,8 @@ def criar_usuario(data):
             nome=data.nome,
             tipo=data.tipo,
             descricao=data.descricao,
-            email=data.email
+            email=data.email,
+            senha=data.senha
         )
         db.add(user)
         db.commit()

@@ -8,8 +8,8 @@ class Usuario(Base):
     nome = Column(String(120), nullable=False)
     tipo = Column(String(120), nullable=False)
     descricao = Column(String(250))
-    email = Column(String, String(120), unique=True, nullable=False)
-    senha_hash = Column(String(255), nullable=False)
+    email = Column(String(120), unique=True, nullable=False)
+    senha = Column(String(255), nullable=False)
     
     
 class Rota(Base):

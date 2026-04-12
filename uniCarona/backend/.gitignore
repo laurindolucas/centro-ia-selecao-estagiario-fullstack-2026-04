@@ -1,1 +1,14 @@
 .venv/
+*.pyc
+*.pyo
+*.pyd
+
+
+.venv/
+
+
+
+*.db
+
+.DS_Store
+Thumbs.db

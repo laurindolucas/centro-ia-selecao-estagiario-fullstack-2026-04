@@ -4,6 +4,8 @@ class UserCreate(BaseModel):
     nome: str
     descricao: str
     email: str
+    tipo: str
+    senha: str
     
 class RideCreate(BaseModel):
     usuario_id: int
