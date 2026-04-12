@@ -1,7 +1,7 @@
 from database.connection import SessionLocal
 from models.models import Usuario
 
-def create_user(data):
+def criar_usuario(data):
     db = SessionLocal()
     
     try:
@@ -19,18 +19,18 @@ def create_user(data):
         db.close()
 
 
-def get_user(user_id):
+def buscar_usuario(usuario_id):
     db = SessionLocal()
     try:
-        return db.query(Usuario).filter(Usuario.id == user_id).first()
+        return db.query(Usuario).filter(Usuario.id == usuario_id).first()
     finally:
         db.close()
 
-def update_user(user_id, data):
+def atualizar_usuario(usuario_id, data):
     db = SessionLocal()
     
     try:
-        user = db.query(Usuario).filter(Usuario.id == user_id).first()
+        user = db.query(Usuario).filter(Usuario.id == usuario_id).first()
     
         if not user:
             return None
@@ -48,10 +48,10 @@ def update_user(user_id, data):
         db.close()
 
 
-def delete_user(user_id):
+def deletar_usuario(usuario_id):
     db = SessionLocal()
     try:
-        user = db.query(Usuario).filter(Usuario.id == user_id).first()
+        user = db.query(Usuario).filter(Usuario.id == usuario_id).first()
 
         if not user:
             return None
