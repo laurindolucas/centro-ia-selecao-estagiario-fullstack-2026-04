@@ -3,48 +3,80 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #cfd6e1;
+  background: #0f1117;
+  padding: 24px;
+  font-family: system-ui, -apple-system, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 .rota-card {
-  background: #e9e9e9;
-  padding: 30px;
-  border-radius: 20px;
-  width: 320px;
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+  background: #1a1d27;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 32px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 380px;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
 }
 
 .rota-card h1 {
   text-align: center;
-  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #f0f0f5;
+  margin: 0 0 24px;
+  letter-spacing: -0.01em;
 }
 
 .rota-card label {
-  margin-top: 10px;
-  font-size: 14px;
+  margin-top: 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #9a9ab0;
+  letter-spacing: 0.02em;
 }
 
 .rota-card input {
   margin-top: 5px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f0f0f5;
+  font-size: 14px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+
+.rota-card input::placeholder {
+  color: rgba(154, 154, 176, 0.5);
+}
+
+.rota-card input:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
 }
 
 button {
-  margin-top: 20px;
+  margin-top: 24px;
   padding: 12px;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #6c63ff;
-  color: white;
-  font-weight: bold;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.2s;
+  letter-spacing: 0.02em;
+  transition: background 0.15s, transform 0.1s;
 }
 
 button:hover {
-  opacity: 0.9;
+  background: #5a54e0;
+}
+
+button:active {
+  transform: scale(0.98);
 }

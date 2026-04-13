@@ -1,7 +1,25 @@
+:root {
+  --color-bg: #0f1117;
+  --color-surface: #1a1d27;
+  --color-surface-alt: #22263a;
+  --color-accent: #6c63ff;
+  --color-accent-hover: #5a54e0;
+  --color-text-primary: #f0f0f5;
+  --color-text-secondary: #9a9ab0;
+  --color-text-dark: #1a1a2e;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-input-bg: #f8f8fc;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #13161d;
+  font-family: system-ui, -apple-system, Arial, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
 }
 
 .container {
@@ -9,79 +27,109 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
+  gap: 16px;
+  padding: 24px;
 }
 
 .splash-logo-cadastro {
-  width: 300px;
+  width: 280px;
 }
 
 .subtitulo {
- margin-top: -120px;
-  color: #ffffff;
-  margin-bottom: 30px;
+  color: var(--color-text-secondary);
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: 0.01em;
 }
 
 .card {
   background: #ffffff;
-  padding: 30px;
-  border-radius: 20px;
-  width: 320px;
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+  padding: 28px 32px;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 2px 24px rgba(0, 0, 0, 0.24);
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
 
 .card label {
-  margin-top: 10px;
-  font-size: 14px;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: 0.02em;
 }
 
 .card input {
-  margin-top: 5px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid #e0e0ef;
+  background: var(--color-input-bg);
+  font-size: 14px;
+  color: var(--color-text-dark);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
 }
 
+.card input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
 
 .tipo-container {
   display: flex;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .tipo-card {
   flex: 1;
-  background: white;
-  border-radius: 12px;
-  padding: 15px;
+  background: #f4f4fb;
+  border-radius: var(--radius-md);
+  padding: 14px 10px;
   text-align: center;
   cursor: pointer;
-  border: 2px solid transparent;
-  transition: 0.2s;
+  border: 1.5px solid transparent;
+  transition: border-color 0.15s, background 0.15s;
+  font-size: 13px;
+  color: #4a4a6a;
+  font-weight: 500;
 }
 
 .tipo-card:hover {
-  background: #f5f5f5;
+  background: #ebebf9;
+  border-color: rgba(108, 99, 255, 0.3);
 }
 
 .tipo-card.ativo {
-  border: 2px solid #6c63ff;
+  border-color: var(--color-accent);
+  background: rgb(255, 255, 255);
+  color: var(--color-accent);
 }
 
 button {
   margin-top: 20px;
   padding: 12px;
   border: none;
-  border-radius: 12px;
-  background: #6c63ff;
-  color: white;
-  font-weight: bold;
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.2s;
+  letter-spacing: 0.02em;
+  transition: background 0.15s, transform 0.1s;
 }
 
 button:hover {
-  opacity: 0.9;
+  background: var(--color-accent-hover);
+}
+
+button:active {
+  transform: scale(0.98);
 }
