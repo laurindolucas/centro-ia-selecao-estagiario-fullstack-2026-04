@@ -24,7 +24,7 @@ def buscar_rota_por_id_rota(rota_id: int):
 
 @router.put("/rotas/{rotas_id}")
 def atulizar_rotas_rota(rotas_id: int, rota: RideCreate):
-    return atualizar_rota()
+    return atualizar_rota(rotas_id, rota)
 
 @router.delete("/rotas/{rotas_id}")
 def deletar_rotas_rota(rotas_id: int):
