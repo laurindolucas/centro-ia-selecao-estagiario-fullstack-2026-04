@@ -63,6 +63,12 @@ def atualizar_rota(rota_id, data):
     finally:
         db.close()
         
+def buscar_rota_por_id(rota_id):
+    db = SessionLocal()
+    try:
+        return db.query(Rota).filter(Rota.id == rota_id).first()
+    finally:
+        db.close()
         
 def deletar_rota(rota_id):
     db = SessionLocal()
