@@ -13,12 +13,13 @@ export default function Cadastro() {
   const [senha, setSenha] = useState("");
   const [tipo, setTipo] = useState("");
 
-  const handleSubmit = async () => {
-    if (!nome || !email || !senha || !tipo) {
-      alert("Preencha todos os campos obrigatórios");
-      return;
-    }
+const handleSubmit = async () => {
+  if (!nome || !email || !senha || !tipo) {
+    alert("Preencha todos os campos obrigatórios");
+    return;
+  }
 
+  try {
     const res = await fetch("http://127.0.0.1:8000/users", {
       method: "POST",
       headers: {
@@ -35,10 +36,22 @@ export default function Cadastro() {
 
     const data = await res.json();
 
+    console.log("Resposta API:", data);
+
+    if (!res.ok) {
+      alert("Erro ao cadastrar usuário");
+      return;
+    }
+
     localStorage.setItem("user_id", data.id);
 
     navigate("/story");
-  };
+
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao conectar com o servidor");
+  }
+};
 
   return (
     <div className="container">
