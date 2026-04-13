@@ -1,4 +1,4 @@
-from sqlalchemy import (Column, Integer, String, ForeignKey)
+from sqlalchemy import (Column, Integer, String, ForeignKey, Float)
 from database.connection import Base
 
 class Usuario(Base):
@@ -20,3 +20,7 @@ class Rota(Base):
     origem = Column(String(120), nullable=False)
     destino = Column(String(120), nullable=False)
     horario = Column(String(20), nullable=False)
+    lat_origem = Column(Float)
+    lon_origem = Column(Float)
+    lat_destino = Column(Float)
+    lon_destino = Column(Float)
