@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Splash from "./page/Splash";
 import Cadastro from "./page/Cadastro";
+import Story from "./page/Story";
 
 
 function App() {
@@ -10,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Splash />} />
         <Route path="/cadastro" element={<Cadastro />} />
-
+        <Route path="/Story" element={<Story/>} />
       </Routes>
     </BrowserRouter>
   );
