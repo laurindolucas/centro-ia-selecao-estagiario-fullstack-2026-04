@@ -1,96 +1,113 @@
 import os
-from google import genai
+from openai import OpenAI
 from dotenv import load_dotenv
 import json
+import re
 
 load_dotenv()
 
-api_key = os.getenv("GEMINI_API_KEY")
-client = genai.Client(api_key=api_key) if api_key else None
+chave_api = os.getenv("GROQ_API_KEY")
 
-_cache = {}
+cliente_ia = OpenAI(
+    api_key=chave_api,
+    base_url="https://api.groq.com/openai/v1"
+) if chave_api else None
+
+cache_resultados = {}
 
 
-def _cache_key(dist_origem, dist_destino, diff_horario):
-    return f"{round(dist_origem,1)}-{round(dist_destino,1)}-{round(diff_horario)}"
+def gerar_chave_cache(dist_origem, dist_destino, diferenca_horario):
+    return f"{round(dist_origem,1)}-{round(dist_destino,1)}-{round(diferenca_horario)}"
 
 
-def classificar_match(dist_origem, dist_destino, diff_horario):
-    key = _cache_key(dist_origem, dist_destino, diff_horario)
-    if key in _cache:
-        return _cache[key]
+def classificar_compatibilidade(dist_origem, dist_destino, diferenca_horario):
+    chave = gerar_chave_cache(dist_origem, dist_destino, diferenca_horario)
 
-    fallback = _fallback_score(dist_origem, dist_destino, diff_horario)
+    if chave in cache_resultados:
+        return cache_resultados[chave]
 
-    if not client:
-        return fallback
+    resultado_fallback = calcular_compatibilidade_local(
+        dist_origem, dist_destino, diferenca_horario
+    )
+
+    if not cliente_ia:
+        return resultado_fallback
 
     prompt = f"""
-    Você é um sistema de recomendação de caronas.
+        Você é um sistema de recomendação de caronas.
 
-    Analise os dados abaixo e avalie a compatibilidade entre duas rotas.
+        Analise os dados abaixo e avalie a compatibilidade entre duas rotas.
 
-    Dados:
-    - Distância entre origens: {dist_origem} km
-    - Distância entre destinos: {dist_destino} km
-    - Diferença de horário: {diff_horario} minutos
+        Dados:
+        - Distância entre origens: {dist_origem} km
+        - Distância entre destinos: {dist_destino} km
+        - Diferença de horário: {diferenca_horario} minutos
 
-    Regras:
-    - Distâncias menores indicam melhor compatibilidade
-    - Diferença de horário menor que 30 minutos é ideal
+        Regras:
+        - Distâncias menores indicam melhor compatibilidade
+        - Diferença de horário menor que 30 minutos é ideal
 
-    Retorne um JSON no formato:
+        Retorne um JSON no formato:
 
-    {{
-      "classificacao": "alta | média | baixa",
-      "score": número de 0 a 100,
-      "explicacao": "Texto curto explicando a decisão"
-    }}
+        {{
+        "classificacao": "alta | média | baixa",
+        "score": número de 0 a 100,
+        "explicacao": "Texto curto explicando a decisão"
+        }}
 
-    Retorne apenas o JSON, sem markdown.
-    """
+        Retorne apenas o JSON.
+        """
 
     try:
-        response = client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=prompt
+        resposta = cliente_ia.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {"role": "system", "content": "Responda apenas com JSON válido."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.3
         )
 
-        texto = response.text.strip().replace("```json", "").replace("```", "")
-        resultado = json.loads(texto)
-        _cache[key] = resultado
+        texto_resposta = resposta.choices[0].message.content.strip()
+
+        json_encontrado = re.search(r"\{.*\}", texto_resposta, re.DOTALL)
+        if not json_encontrado:
+            raise ValueError("Resposta inválida da IA")
+
+        resultado = json.loads(json_encontrado.group())
+
+        cache_resultados[chave] = resultado
         return resultado
 
-    except Exception as e:
-        print(f"Erro IA: {e}")
-        _cache[key] = fallback
-        return fallback
+    except Exception as erro:
+        print(f"Erro IA: {erro}")
+        cache_resultados[chave] = resultado_fallback
+        return resultado_fallback
 
 
-def _fallback_score(dist_origem, dist_destino, diff_horario):
+def calcular_compatibilidade_local(dist_origem, dist_destino, diferenca_horario):
     score = 0
-    explicacao = []
+    explicacoes = []
 
     if dist_origem <= 1:
         score += 40
-        explicacao.append("origens muito próximas")
+        explicacoes.append("origens muito próximas")
     elif dist_origem <= 3:
         score += 20
-        explicacao.append("origens razoavelmente próximas")
-
+        explicacoes.append("origens razoavelmente próximas")
     if dist_destino <= 1:
         score += 40
-        explicacao.append("destinos muito próximos")
+        explicacoes.append("destinos muito próximos")
     elif dist_destino <= 3:
         score += 20
-        explicacao.append("destinos razoavelmente próximos")
+        explicacoes.append("destinos razoavelmente próximos")
 
-    if diff_horario <= 15:
+    if diferenca_horario <= 15:
         score += 20
-        explicacao.append("horários quase idênticos")
-    elif diff_horario <= 30:
+        explicacoes.append("horários quase idênticos")
+    elif diferenca_horario <= 30:
         score += 10
-        explicacao.append("horários compatíveis")
+        explicacoes.append("horários compatíveis")
 
     if score >= 70:
         classificacao = "alta"
@@ -99,10 +116,13 @@ def _fallback_score(dist_origem, dist_destino, diff_horario):
     else:
         classificacao = "baixa"
 
-    texto = "Compatibilidade calculada localmente. " + (", ".join(explicacao) if explicacao else "Rotas com pouca sobreposição.")
+    explicacao_final = (
+        "Compatibilidade calculada localmente. "
+        + (", ".join(explicacoes) if explicacoes else "Rotas com pouca sobreposição.")
+    )
 
     return {
         "classificacao": classificacao,
         "score": score,
-        "explicacao": texto
+        "explicacao": explicacao_final
     }
