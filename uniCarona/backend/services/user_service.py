@@ -13,20 +13,22 @@ def criar_usuario(data):
         if existing:
             return {"error": "Email já cadastrado"}
 
+        senha_hash = pwd_context.hash(data.senha[:72])  
+
         user = Usuario(
             nome=data.nome,
             tipo=data.tipo,
             descricao=data.descricao,
             email=data.email,
-            senha=pwd_context.hash(data.senha)
+            senha=senha_hash
         )
+
         db.add(user)
         db.commit()
         db.refresh(user)
         return user
     finally:
         db.close()
-
 
 def buscar_usuario(usuario_id):
     db = SessionLocal()
