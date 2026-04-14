@@ -1,0 +1,6 @@
+body {
+  margin: 0;
+  background-color: #0f1117; 
+  display: flex;
+  justify-content: center;
+}
