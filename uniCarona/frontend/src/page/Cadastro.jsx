@@ -45,7 +45,7 @@ const handleSubmit = async () => {
 
     localStorage.setItem("user_id", data.id);
 
-    navigate("/story");
+    navigate("/Story");
 
   } catch (error) {
     console.error(error);

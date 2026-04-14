@@ -37,8 +37,12 @@ export async function buscarRotas() {
   return res.json();
 }
 
-
 export async function buscarMatches(rotaId) {
   const res = await fetch(`${API_URL}/matches/${rotaId}`);
+
+  if (!res.ok) {
+    throw new Error("Erro ao buscar matches");
+  }
+
   return res.json();
 }

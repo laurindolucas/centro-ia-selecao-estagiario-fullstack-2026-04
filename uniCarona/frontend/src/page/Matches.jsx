@@ -37,6 +37,18 @@ export default function Matches() {
     return "Baixa compatibilidade";
   };
 
+  const formatarRota = (origem, destino) => {
+    if (!origem && !destino) return null;
+    const o = origem || "Origem não informada";
+    const d = destino || "Destino não informado";
+    return `${o} → ${d}`;
+  };
+
+  const formatarHorario = (horario) => {
+    if (!horario) return null;
+    return horario;
+  };
+
   return (
     <div className="matches-container">
       <div className="topo">
@@ -50,51 +62,57 @@ export default function Matches() {
         <div className="sem-matches">
           <h2>Nenhuma carona encontrada</h2>
           <p>Tente ajustar o horário ou o local da rota</p>
-
-          <button onClick={() => navigate("/rota")}>
-            Tentar novamente
-          </button>
+          <button onClick={() => navigate("/rota")}>Tentar novamente</button>
         </div>
       )}
 
       {!loading && matches.length > 0 && (
         <div className="lista">
-          {matches.map((m) => (
-            <div className="card" key={m.rota_id}>
-              
-              <div className="card-header">
-                <h2>Usuário #{m.usuario_id}</h2>
+          {matches.map((m) => {
+            const rota = formatarRota(m.origem, m.destino);
+            const horario = formatarHorario(m.horario);
+            const temDetalhes = rota || horario;
 
-                <div className={`score ${getCorScore(m.score)}`}>
-                  {m.score}%
-                </div>
-              </div>
-
-              <div className="infos">
-                <span>{(m.dist_origem_km * 1000).toFixed(0)}m de você</span>
-                <span>{Math.round(m.diferenca_horario_min)} min de diferença</span>
-              </div>
-
-              <div className="box-ia">
-                <strong>{getTextoCompatibilidade(m.classificacao)}</strong>
-                <p>{m.explicacao}</p>
-              </div>
-
-              <div className="detalhes">
-                <div>
-                  <span>Rota</span>
-                  <p>Origem → Destino</p>
+            return (
+              <div className="card" key={m.rota_id}>
+                <div className="card-header">
+                  <h2>{m.nome_usuario}</h2>
+                  <div className={`score ${getCorScore(m.score_ia)}`}>
+                    {m.score_ia}%
+                  </div>
                 </div>
 
-                <div>
-                  <span>Horário</span>
-                  <p>--:--</p>
+                <div className="infos">
+                  <span>{(m.dist_origem_km * 1000).toFixed(0)}m de você</span>
+                  <span>{Math.round(m.diferenca_horario_min)} min de diferença</span>
                 </div>
-              </div>
 
-              <button className="btn">Solicitar carona</button>
-            </div>
-          ))}
+                <div className="box-ia">
+                  <strong>{getTextoCompatibilidade(m.classificacao)}</strong>
+                  <p>{m.explicacao}</p>
+                </div>
+
+                {temDetalhes ? (
+                  <div className="detalhes">
+                    <div>
+                      <span>Rota</span>
+                      <p>{m.origem} → {m.destino}</p> 
+                    </div>
+                    <div>
+                      <span>Horário</span>
+                      <p>{m.horario}</p> 
+                    </div>
+                  </div>
+                ) : (
+                  <div className="detalhes-ausentes">
+                    <span>Detalhes da rota não disponíveis</span>
+                  </div>
+                )}
+
+                <button className="btn">Solicitar carona</button>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

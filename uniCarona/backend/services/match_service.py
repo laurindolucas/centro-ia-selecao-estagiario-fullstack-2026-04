@@ -1,6 +1,7 @@
 from services.location_service import calcular_distancia
 from services.ride_service import buscar_todas_rotas
 from services.ai_service import classificar_match
+from services.user_service import buscar_usuario
 from datetime import datetime
 
 
@@ -8,13 +9,11 @@ def calcular_diferenca_horario(h1, h2):
     formato = "%H:%M"
     t1 = datetime.strptime(h1, formato)
     t2 = datetime.strptime(h2, formato)
-    
     return abs((t1 - t2).total_seconds() / 60)
 
 
 def calcular_score(dist_origem, dist_destino, diff_horario):
     score = 0
-
     if dist_origem <= 1:
         score += 40
     if dist_destino <= 1:
@@ -56,7 +55,7 @@ def encontrar_matches(rota_base):
         if dist_origem is None or dist_destino is None:
             continue
 
-        if dist_origem > 2 or dist_destino > 2:
+        if dist_origem > 5 or dist_destino > 5:
             continue
 
         score = calcular_score(dist_origem, dist_destino, diff_horario)
@@ -67,20 +66,26 @@ def encontrar_matches(rota_base):
                 dist_destino,
                 diff_horario
             )
-        except:
+        except Exception:
             ia_resultado = {
                 "score": score,
                 "classificacao": "média",
                 "explicacao": "Erro ao processar IA"
             }
 
+        usuario = buscar_usuario(rota.usuario_id)
+        nome_usuario = usuario.nome if usuario else f"Usuário #{rota.usuario_id}"
+
         resultados.append({
             "rota_id": rota.id,
             "usuario_id": rota.usuario_id,
+            "nome_usuario": nome_usuario,
+            "origem": rota.origem,
+            "destino": rota.destino,
+            "horario": rota.horario,
             "dist_origem_km": dist_origem,
             "dist_destino_km": dist_destino,
             "diferenca_horario_min": diff_horario,
-
             "score_backend": score,
             "score_ia": ia_resultado["score"],
             "classificacao": ia_resultado["classificacao"],
@@ -88,5 +93,4 @@ def encontrar_matches(rota_base):
         })
 
     resultados.sort(key=lambda x: x["score_ia"], reverse=True)
-
     return resultados[:5]
