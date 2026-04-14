@@ -9,7 +9,8 @@ export default function Matches() {
 
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [modalAberto, setModalAberto] = useState(false);
+  const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
   useEffect(() => {
     carregarMatches();
   }, []);
@@ -96,11 +97,11 @@ export default function Matches() {
                   <div className="detalhes">
                     <div>
                       <span>Rota</span>
-                      <p>{m.origem} → {m.destino}</p> 
+                      <p>{m.origem} → {m.destino}</p>
                     </div>
                     <div>
                       <span>Horário</span>
-                      <p>{m.horario}</p> 
+                      <p>{m.horario}</p>
                     </div>
                   </div>
                 ) : (
@@ -109,10 +110,32 @@ export default function Matches() {
                   </div>
                 )}
 
-                <button className="btn">Solicitar carona</button>
+                <button
+                  className="btn"
+                  onClick={() => {
+                    setUsuarioSelecionado(m.nome_usuario);
+                    setModalAberto(true);
+                  }}
+                >
+                  Solicitar carona
+                </button>
               </div>
             );
           })}
+        </div>
+      )}
+      {modalAberto && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Solicitação enviada</h2>
+            <p>
+              Sua solicitação de carona para <strong>{usuarioSelecionado}</strong> foi enviada! Vocês foram conectados e entraram em contato em breve!
+            </p>
+
+            <button onClick={() => setModalAberto(false)}>
+              Fechar
+            </button>
+          </div>
         </div>
       )}
     </div>
