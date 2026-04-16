@@ -1,6 +1,6 @@
-from services.location_service import calcular_distancia
+from services.location_service import calcular_distancia_km
 from services.ride_service import buscar_todas_rotas
-from services.ai_service import classificar_match
+from services.ai_service import classificar_compatibilidade
 from services.user_service import buscar_usuario
 from datetime import datetime
 
@@ -37,12 +37,12 @@ def encontrar_matches(rota_base):
         if rota.lat_origem is None or rota.lat_destino is None:
             continue
 
-        dist_origem = calcular_distancia(
+        dist_origem = calcular_distancia_km(
             (rota_base.lat_origem, rota_base.lon_origem),
             (rota.lat_origem, rota.lon_origem)
         )
 
-        dist_destino = calcular_distancia(
+        dist_destino = calcular_distancia_km(
             (rota_base.lat_destino, rota_base.lon_destino),
             (rota.lat_destino, rota.lon_destino)
         )
@@ -61,7 +61,7 @@ def encontrar_matches(rota_base):
         score = calcular_score(dist_origem, dist_destino, diff_horario)
 
         try:
-            ia_resultado = classificar_match(
+            ia_resultado = classificar_compatibilidade(
                 dist_origem,
                 dist_destino,
                 diff_horario
