@@ -10,9 +10,9 @@ cliente = OpenAI(
 )
 
 resposta = cliente.chat.completions.create(
-    model="llama-3.3-70b-versatile",
+    model="llama-3.1-8b-instant",
     messages=[
-        {"role": "user", "content": "Me diga oi"}
+        {"role": "user", "content": "Diga apenas: funcionando"}
     ]
 )
 
