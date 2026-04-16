@@ -33,29 +33,30 @@ def classificar_compatibilidade(dist_origem, dist_destino, diferenca_horario):
     if not cliente_ia:
         return resultado_fallback
 
-    prompt = f"""
-        Você é um sistema de recomendação de caronas.
+    prompt = f"""Você é um especialista em logística urbana e sistemas de mobilidade inteligente.
+        Sua tarefa é avaliar a viabilidade de uma carona compartilhada entre dois universitários.
 
-        Analise os dados abaixo e avalie a compatibilidade entre duas rotas.
+        Dados técnicos:
+        - Desvio na origem: {dist_origem} km
+        - Desvio no destino: {dist_destino} km
+        - Janela temporal (diferença de horário): {diferenca_horario} minutos
 
-        Dados:
-        - Distância entre origens: {dist_origem} km
-        - Distância entre destinos: {dist_destino} km
-        - Diferença de horário: {diferenca_horario} minutos
+        Regras de Negócio:
+        - Priorize a convergência de trajeto (distâncias baixas).
+        - A janela temporal ideal é inferior a 30 minutos.
+        - O score deve refletir a eficiência logística (0 a 100).
 
-        Regras:
-        - Distâncias menores indicam melhor compatibilidade
-        - Diferença de horário menor que 30 minutos é ideal
+        Instruções de Resposta:
+        1. A "explicacao" deve ser amigável e didática, porém profissional. Use termos técnicos como "convergência de trajeto" ou "janela temporal", mas explique de forma "suave" como se estivesse conversando com o usuário.
+        2. A "explicacao" DEVE começar obrigatoriamente com o prefixo "[IA] Sugestão: ".
+        3. Retorne APENAS o JSON solicitado.
 
-        Retorne um JSON no formato:
-
+        Formato:
         {{
         "classificacao": "alta | média | baixa",
-        "score": número de 0 a 100,
-        "explicacao": "Texto curto explicando a decisão"
+        "score": número,
+        "explicacao": "[IA] Sugestão: Texto técnico porém suave aqui..."
         }}
-
-        Retorne apenas o JSON.
         """
 
     try:
