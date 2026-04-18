@@ -1,4 +1,4 @@
-# UniCarona — Mobilidade Acadêmica Inteligente com IA
+# UniCarona — Mobilidade Acadêmica com IA
 
 O UniCarona é uma plataforma FullStack desenvolvida para otimizar o transporte universitário através de conexões inteligentes. O sistema vai além de um simples mural de caronas, utilizando Inteligência Artificial e dados geoespaciais para calcular a compatibilidade real entre trajetos, promovendo uma mobilidade urbana mais eficiente, econômica e sustentável para a comunidade acadêmica.
 
